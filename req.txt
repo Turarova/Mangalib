@@ -4,3 +4,4 @@ psycopg2-binary
 python-decouple
 drf-yasg
 Pillow
+django-cors-headers
