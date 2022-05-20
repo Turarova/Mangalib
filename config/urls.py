@@ -35,7 +35,7 @@ schema_view = get_schema_view(
 
 router = DefaultRouter()
 router.register('novella', NovellaViewSet)
-router.register('novella', NovellaImageViewSet)
+router.register('novella-img', NovellaImageViewSet)
 router.register('genres', GenreViewSet)
 
 
