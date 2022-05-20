@@ -5,3 +5,5 @@ python-decouple
 drf-yasg
 Pillow
 django-cors-headers
+djangorestframework-simplejwt
+PyJWT
