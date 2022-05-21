@@ -35,7 +35,7 @@ schema_view = get_schema_view(
 
 router = DefaultRouter()
 router.register('novella', NovellaViewSet)
-router.register('novella-img', NovellaImageViewSet)
+router.register('novella', NovellaImageViewSet)
 router.register('genres', GenreViewSet)
 
 
@@ -44,5 +44,6 @@ urlpatterns = [
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0)),
     path('api/v1/', include('account.urls')),
     path('api/v1/', include(router.urls)),
+    path('api/v1/novella/<int:id>/toggle_like/', toggle_like),
 
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

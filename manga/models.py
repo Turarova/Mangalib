@@ -1,7 +1,7 @@
 from datetime import date
 
 from django.db import models
-
+from account.models import User
 
 class Genre(models.Model):
     slug = models.SlugField(max_length=100, primary_key=True)
@@ -34,4 +34,13 @@ class NovellaImage(models.Model):
     novella = models.ForeignKey(Novella, on_delete=models.CASCADE, related_name='images')
     image = models.ImageField(upload_to='novella', blank=True, null = True)
 
+class Like(models.Model):
+    user = models.ForeignKey(User, related_name='likes', on_delete=models.CASCADE)
+    novella = models.ForeignKey(Novella, related_name='likes', on_delete=models.CASCADE)
 
+
+# class Comment(models.Model):
+#     user = models.ForeignKey(User, related_name='comments', on_delete=models.CASCADE)
+#     novella = models.ForeignKey(Novella, related_name='comments', on_delete=models.CASCADE)
+#     created_at = models.DateTimeField(auto_now_add=True)
+#     text = models.TextField()
