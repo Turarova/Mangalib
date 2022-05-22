@@ -4,8 +4,10 @@ from django.utils.html import strip_tags
 
 def send_confirmation_email(user):
     context = {
-        "email_text_detail": """Thanks for creating account.
-                            Please verify your account""",
+        "email_text_detail": """
+                        Thanks for creating account.
+                        Please verify your account
+                            """,
         "email": user.email,
         "activation_code": user.activation_code
     }

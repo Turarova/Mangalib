@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, permissions
@@ -20,6 +21,10 @@ class RegisterView(APIView):
 class LoginView(TokenObtainPairView):
     serializer_class = LoginSerializer
 
+#
+# class LogoutView(APIView):
+#     permission_classes = [IsAuthenticated, ]
+
 
 class ActivationView(APIView):
     def post(self, request):
@@ -31,6 +36,7 @@ class ActivationView(APIView):
             user.activation_code = ''
             user.save()
             return Response({'msg':'User successfully activated'})
+
 
 class UserListAPIView(ListAPIView):
     queryset = User.objects.all()
