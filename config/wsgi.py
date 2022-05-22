@@ -12,7 +12,10 @@ import os
 from django.core.wsgi import get_wsgi_application
 from whitenoise.django import DjangoWhiteNoise
 
+from config.settings import BASE_DIR
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 
 application = get_wsgi_application()
 application = DjangoWhiteNoise(application)
+# application = WhiteNoise(application, root=os.path.join(BASE_DIR, 'static'))

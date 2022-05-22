@@ -3,7 +3,7 @@ from django.db.models import Q
 from rest_framework import viewsets, status
 from rest_framework.decorators import action, api_view
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 
 from .serializers import *
@@ -23,13 +23,18 @@ class MyPaginationView(PageNumberPagination):
 class NovellaViewSet(viewsets.ModelViewSet):
     queryset = Novella.objects.all()
     serializer_class = NovellaSerializer
-    # permission_classes = [IsAuthenticated, ]
+    permission_classes = [IsAdminUser, ]
     pagination_class = MyPaginationView
 
-    # def get_permissions(self):
-    #     if self.action in ['update', 'partial_update', 'destroy', 'create', ]:
-    #         permissions = [IsAuthenticated, ]
-    #     return permissions
+    def get_permissions(self):
+        """pereopredelim dannyi method"""
+        if self.action in ['update', 'partial_update', 'destroy', 'create']:
+            permissions = [IsAdminUser, ]
+        # elif self.action == 'create':
+        #     permissions = [IsAdminUser, ]
+        else:
+            permissions = [AllowAny, ]
+        return [permission() for permission in permissions]
 
     # @action(detail=False, methods=['get'])
     # def own(self, request, pk=None):
