@@ -10,3 +10,4 @@ class GenreAdmin(admin.ModelAdmin):
 
 admin.site.register(Genre, GenreAdmin)
 admin.site.register(Novella)
+admin.site.register(NovellaImage)
