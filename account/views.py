@@ -22,8 +22,8 @@ class LoginView(TokenObtainPairView):
     serializer_class = LoginSerializer
 
 #
-# class LogoutView(APIView):
-#     permission_classes = [IsAuthenticated, ]
+class LogoutView(APIView):
+    permission_classes = [IsAuthenticated, ]
 
 
 class ActivationView(APIView):
