@@ -39,8 +39,11 @@ class Like(models.Model):
     novella = models.ForeignKey(Novella, related_name='likes', on_delete=models.CASCADE)
 
 
-# class Comment(models.Model):
-#     user = models.ForeignKey(User, related_name='comments', on_delete=models.CASCADE)
-#     novella = models.ForeignKey(Novella, related_name='comments', on_delete=models.CASCADE)
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     text = models.TextField()
+class Comment(models.Model):
+    user = models.ForeignKey(User, related_name='comments', on_delete=models.CASCADE)
+    novella = models.ForeignKey(Novella, related_name='comments', on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    text = models.TextField()
+
+    def __str__(self):
+        return self.novella.title

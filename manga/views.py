@@ -102,6 +102,9 @@ def toggle_like(request, id):
     serializer = NovellaSerializer(novella)
     return Response(serializer.data)
 
-# class CommentViewSet(viewsets.ModelViewSet):
-#     queryset = Comment.objects.all()
-#     serializer_class = CommentSerializer
+class CommentViewSet(viewsets.ModelViewSet):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)

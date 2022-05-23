@@ -44,12 +44,12 @@ class NovellaImageSerializer(serializers.ModelSerializer):
         return representation
 
 
-# class CommentSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = Comment
-#         exclude = ('novella', )
-#
-#     def to_representation(self, instance):
-#         representation = super().to_representation(instance)
-#         representation['user'] = instance.user.username
-#         return representation
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        exclude = ('user',)
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['user'] = instance.user.email
+        return representation
