@@ -37,6 +37,7 @@ router = DefaultRouter()
 router.register('novella', NovellaViewSet)
 router.register('novella', NovellaImageViewSet)
 router.register('genres', GenreViewSet)
+router.register('comments', CommentViewSet)
 
 
 urlpatterns = [

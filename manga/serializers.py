@@ -20,6 +20,12 @@ class NovellaSerializer(serializers.ModelSerializer):
         representation['images'] = NovellaImageSerializer(instance.images.all(),
                                                        many=True,
                                                      context=self.context).data
+        action = self.context.get('action')
+        if action == 'retrieve':
+            # детализация
+            representation['comments'] = CommentSerializer(instance.comments.all(), many=True).data
+        else:
+            representation['comments'] = instance.comments.all().count()
         return representation
 
 

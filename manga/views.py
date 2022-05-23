@@ -6,6 +6,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 
+from .permissions import IsCommentAuthor
 from .serializers import *
 
 
@@ -30,8 +31,6 @@ class NovellaViewSet(viewsets.ModelViewSet):
         """pereopredelim dannyi method"""
         if self.action in ['update', 'partial_update', 'destroy', 'create']:
             permissions = [IsAdminUser, ]
-        # elif self.action == 'create':
-        #     permissions = [IsAdminUser, ]
         else:
             permissions = [AllowAny, ]
         return [permission() for permission in permissions]
@@ -105,6 +104,17 @@ def toggle_like(request, id):
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
+    permission_classes = (IsCommentAuthor, )
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+       serializer.save(user=self.request.user)
+
+    # def get_permissions(self):
+    #     """pereopredelim dannyi method"""
+    #     if self.action == 'destroy':
+    #         permissions = [IsCommentAuthor or IsAdminUser]
+    #     elif self.action == 'create':
+    #         permissions = [IsAuthenticated, ]
+    #     else:
+    #         permissions = [AllowAny, ]
+    #     return [permission() for permission in permissions]
