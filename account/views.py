@@ -23,14 +23,26 @@ class LoginView(TokenObtainPairView):
     serializer_class = LoginSerializer
 
 
-class LogoutView(APIView):
-    permission_classes = [IsAuthenticated, ]
+# class LogoutView(APIView):
+#     permission_classes = [IsAuthenticated, ]
+#
+#     def post(self, request):
+#         user = request.user
+#         Token.objects.filter(user=user).delete()
+#         return Response('Successfully logged out', status=status.HTTP_200_OK)
+
+
+
+
+class LogoutAPIView(GenericAPIView):
+    serializer_class = LogoutSerializer
+    permission_classes = (IsAuthenticated,)
 
     def post(self, request):
-        user = request.user
-        Token.objects.filter(user=user).delete()
-        return Response('Successfully logged out', status=status.HTTP_200_OK)
-
+        serializers = self.serializer_class(data=request.data)
+        serializers.is_valid(raise_exception=True)
+        serializers.save()
+        return Response({"msg":"You successfully logged out"}, status=status.HTTP_204_NO_CONTENT)
 
 class ActivationView(APIView):
     def post(self, request):
@@ -55,3 +67,4 @@ class PasswordResetEmailView(GenericAPIView):
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
+
