@@ -1,7 +1,9 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from django.contrib.auth import authenticate
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from django.utils.encoding import smart_str, force_str, smart_bytes, DjangoUnicodeDecodeError
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
 User = get_user_model()
 
@@ -37,3 +39,19 @@ class UserSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class PasswordResetEmailSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    class Meta:
+        fields = ['email']
+
+    def validate(self, attrs):
+        try:
+            email = attrs.get('email', )
+            if User.objects.filter(email=email).exists():
+                user = User.objects.get(email=email)
+                uidb64 = urlsafe_base64_encode(user.id)
+                token = PasswordResetTokenGenerator().make_token(user)
+
+            return attrs
+        except:
+            pass

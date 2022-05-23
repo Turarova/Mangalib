@@ -7,7 +7,7 @@ from rest_framework import status, permissions
 from .serializers import *
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .helpers import send_confirmation_email
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView, GenericAPIView
 
 User = get_user_model()
 
@@ -48,3 +48,10 @@ class UserListAPIView(ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = (permissions.IsAuthenticated, )
+
+
+class PasswordResetEmailView(GenericAPIView):
+    serializer_class = PasswordResetEmailSerializer
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
