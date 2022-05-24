@@ -1,6 +1,9 @@
 from django.shortcuts import get_object_or_404
+from django.urls import reverse
+from django.dispatch import receiver
+from django_rest_passwordreset.signals import reset_password_token_created
+from django.core.mail import send_mail
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.authtoken.models import Token
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, permissions
@@ -21,15 +24,6 @@ class RegisterView(APIView):
 
 class LoginView(TokenObtainPairView):
     serializer_class = LoginSerializer
-
-
-# class LogoutView(APIView):
-#     permission_classes = [IsAuthenticated, ]
-#
-#     def post(self, request):
-#         user = request.user
-#         Token.objects.filter(user=user).delete()
-#         return Response('Successfully logged out', status=status.HTTP_200_OK)
 
 
 
@@ -62,12 +56,21 @@ class UserListAPIView(ListAPIView):
     permission_classes = (permissions.IsAdminUser, )
 
 
-class PasswordResetEmailView(GenericAPIView):
-    serializer_class = PasswordResetEmailSerializer
-    def post(self, request):
-        data = {'request':request, 'data':request.data}
-        serializer = self.serializer_class(data=data)
-        serializer.is_valid(raise_exception=True)
+@receiver(reset_password_token_created)
+def password_reset_token_created(sender, instance, reset_password_token, *args, **kwargs):
+
+    email_plaintext_message = "{}?token={}".format(reverse('password_reset:reset-password-request'), reset_password_token.key)
+
+    send_mail(
+        # title:
+        "Password Reset for {title}".format(title="Some website title"),
+        # message:
+        email_plaintext_message,
+        # from:
+        "noreply@somehost.local",
+        # to:
+        [reset_password_token.user.email]
+    )
 
 
 
@@ -79,21 +82,19 @@ class ChangePasswordView(UpdateAPIView):
     model = User
     permission_classes = (IsAuthenticated,)
 
-    def get_object(self, queryset=None):
-        obj = self.request.user
-        return obj
 
     def update(self, request, *args, **kwargs):
-        self.object = self.get_object()
+        object = request.user
         serializer = self.get_serializer(data=request.data)
 
         if serializer.is_valid():
             # Check old password
-            if not self.object.check_password(serializer.data.get("old_password")):
+            if not object.check_password(request.data.get("old_password")):
                 return Response({"old_password": ["Wrong password."]}, status=status.HTTP_400_BAD_REQUEST)
             # set_password also hashes the password that the user will get
-            self.object.set_password(serializer.data.get("new_password"))
-            self.object.save()
+            object.set_password(request.data.get("new_password"))
+            object.is_active = True
+            object.save()
             response = {
                 'status': 'success',
                 'code': status.HTTP_200_OK,
