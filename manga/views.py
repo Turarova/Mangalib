@@ -16,16 +16,19 @@ class GenreViewSet(viewsets.ModelViewSet):
 
 
 
-class MyPaginationView(PageNumberPagination):
+class MyPaginationClass(PageNumberPagination):
     page_size = 2
+
     def get_paginated_response(self, data):
         return super().get_paginated_response(data)
+
+
 
 class NovellaViewSet(viewsets.ModelViewSet):
     queryset = Novella.objects.all()
     serializer_class = NovellaSerializer
     permission_classes = [IsAdminUser, ]
-    pagination_class = MyPaginationView
+    pagination_class = MyPaginationClass
 
     def get_permissions(self):
         """pereopredelim dannyi method"""
@@ -35,11 +38,6 @@ class NovellaViewSet(viewsets.ModelViewSet):
             permissions = [AllowAny, ]
         return [permission() for permission in permissions]
 
-    # @action(detail=False, methods=['get'])
-    # def own(self, request, pk=None):
-    #     queryset = self.get_queryset()
-    #     serializer = NovellaSerializer(queryset, many=True, context={'request': request})
-    #     return Response(serializer.data, status=status.HTTP_200_OK)
 
     def get_serializer_context(self):
         context = super().get_serializer_context()

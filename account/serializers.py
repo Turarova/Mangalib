@@ -12,7 +12,7 @@ from rest_framework_simplejwt.tokens import RefreshToken, TokenError
 User = get_user_model()
 
 class RegisterSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(min_length=6,
+    password = serializers.CharField(min_length=8,
                                      required=True,
                                      write_only=True)
     class Meta:
@@ -106,4 +106,4 @@ class ChangePasswordSerializer(serializers.Serializer):
     """
     old_password = serializers.CharField(required=True)
     new_password = serializers.CharField(required=True,
-                                         min_length=6, write_only=True)
+                                         min_length=8, write_only=True)
