@@ -3,7 +3,7 @@ from django.db.models import Q
 from rest_framework import viewsets, status
 from rest_framework.decorators import action, api_view
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 
 from .permissions import IsCommentAuthor
@@ -17,7 +17,7 @@ class GenreViewSet(viewsets.ModelViewSet):
 
 
 class MyPaginationClass(PageNumberPagination):
-    page_size = 2
+    page_size = 3
 
     def get_paginated_response(self, data):
         return super().get_paginated_response(data)
@@ -78,14 +78,6 @@ class NovellaViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-
-
-class NovellaImageViewSet(viewsets.ModelViewSet):
-    queryset = NovellaImage.objects.all()
-    serializer_class = NovellaImageSerializer
-
-    def get_serializer_context(self):
-        return {'request': self.request}
 
 
 @api_view(['GET'])
