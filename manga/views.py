@@ -95,7 +95,7 @@ def toggle_like(request, id):
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly, IsCommentAuthor, ]
+    permission_classes = [IsCommentAuthor, ]
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
