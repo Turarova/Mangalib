@@ -17,6 +17,7 @@ class Novella(models.Model):
     description = models.TextField()
     text = models.TextField(blank=True, null=True)
     price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    image = models.ImageField(upload_to='novella', blank=True, null = True)
     release_date = models.IntegerField()
     author_name = models.CharField(max_length=25)
     author_last_name = models.CharField(max_length=50)
@@ -30,10 +31,6 @@ class Novella(models.Model):
     def __str__(self):
         return self.title
 
-
-class NovellaImage(models.Model):
-    novella = models.ForeignKey(Novella, on_delete=models.CASCADE, related_name='images')
-    image = models.ImageField(upload_to='novella', blank=True, null = True)
 
 class Like(models.Model):
     user = models.ForeignKey(User, related_name='likes', on_delete=models.CASCADE)
