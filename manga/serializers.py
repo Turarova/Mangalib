@@ -17,10 +17,8 @@ class NovellaSerializer(serializers.ModelSerializer):
         representation = super().to_representation(instance)
         representation['genre'] = GenreSerializer(instance.genre.all(), many=True).data
         representation['likes'] = instance.likes.all().count()
-        representation['images'] = NovellaImageSerializer(instance.images.all(),
-                                                       many=True,
-                                                     context=self.context).data
         action = self.context.get('action')
+
         if action == 'retrieve':
             # детализация
             representation['comments'] = CommentSerializer(instance.comments.all(), many=True).data
@@ -28,11 +26,6 @@ class NovellaSerializer(serializers.ModelSerializer):
             representation['comments'] = instance.comments.all().count()
         return representation
 
-
-class NovellaImageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = NovellaImage
-        fields = '__all__'
 
     def _get_image_url(self, obj):
         if obj.image:
