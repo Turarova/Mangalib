@@ -50,9 +50,11 @@ INSTALLED_APPS = [
 
     'manga',
     'account',
+    'django_celery_results'
 
 ]
 
+from django.contrib.auth.middleware import AuthenticationMiddleware
 MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
@@ -92,10 +94,10 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'd4gnai8g7i7p1i',
-        'USER': 'asdbtyjcyahwxz',
-        'PASSWORD': 'd0dd69d8f16d813088ece3ad11bd7b6e81c65bfb125bc36f7503ba677f2eeded',
-        'HOST': 'ec2-34-236-94-53.compute-1.amazonaws.com',
+        'NAME': 'manga_db',
+        'USER': 'aigerim',
+        'PASSWORD': '1',
+        'HOST': 'localhost',
         'PORT': 5432,
     }
 }
@@ -175,11 +177,11 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'maviboncuaika@gmail.com'
-EMAIL_HOST_PASSWORD = 'Turarova_A202277212'
+EMAIL_HOST_USER = 'youremail'
+EMAIL_HOST_PASSWORD = 'yourpassword'
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': False,
@@ -210,5 +212,13 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 }
 
+REDIS_HOST = 'localhost'
+REDIS_PORT = '6379'
 
+CELERY_BROKER_URL = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
+CELERY_BROKER_TRANSPORT_OPTIONS = {'visibility_timeout' : 3600}
+CELERY_RESULT_BACKEND = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
 

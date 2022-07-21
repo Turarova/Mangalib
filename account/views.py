@@ -3,6 +3,7 @@ from django.urls import reverse
 from django.dispatch import receiver
 from django_rest_passwordreset.signals import reset_password_token_created
 from django.core.mail import send_mail
+from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -105,3 +106,18 @@ class ChangePasswordView(UpdateAPIView):
             return Response(response)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class PasswordResetView(APIView):
+    serializer_class = PasswordResetEmailSerializer
+    def post(self, request):
+        data = request.data
+        # email = request.email
+        serializer = self.serializer_class(data=data)
+        if serializer.is_valid():
+            pass
+        return Response('OK', 200)
+
+    @action(['GET'],detail='fe')
+    def hello(self):
+        return Response("World")
