@@ -10,8 +10,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
-# import django
-# django.setup()
 
 import os
 from datetime import timedelta
@@ -54,11 +52,11 @@ INSTALLED_APPS = [
 
     'manga',
     'account',
-    'django_celery_results'
+    # 'django_celery_results'
 
 ]
 
-from django.contrib.auth.middleware import AuthenticationMiddleware
+
 MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
@@ -182,7 +180,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'maviboncuaika@gmail.com'
-EMAIL_HOST_PASSWORD = 'Turarova_A202277212'
+EMAIL_HOST_PASSWORD = 'jyxphlabdhwvvzpy'
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),

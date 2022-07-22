@@ -20,7 +20,7 @@ class RegisterView(APIView):
         serializer = RegisterSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             user = serializer.save()
-            send_confirmation_email(user)
+            send_confirmation_email(user, user.activation_code)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 class LoginView(TokenObtainPairView):
