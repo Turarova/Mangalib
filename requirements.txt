@@ -16,3 +16,5 @@ python-decouple==3.6
 redis==4.3.4
 requests==2.27.1
 whitenoise==6.1.0
+
+
