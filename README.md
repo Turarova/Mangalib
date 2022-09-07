@@ -21,6 +21,21 @@
 * смена пароля
 * восстановление пароля 
 ### Библиотеки использованные в проекте: 
-
+* celery==5.2.7
+* coreschema==0.0.4
+* dj-database-url==0.5.0
+* Django==4.1.1
+* django-cors-headers==3.12.0
+* django-rest-passwordreset==1.2.1
+* djangorestframework==3.13.1
+* djangorestframework-simplejwt==5.1.0
+* drf-yasg==1.20.0
+* gunicorn==20.1.0
+* Pillow==9.1.1
+* psycopg2-binary==2.9.3
+* PyJWT==2.4.0
+* python-decouple==3.6
+* redis==4.3.4
+* whitenoise==6.1.0
 
 
