@@ -3,7 +3,7 @@ from django.db.models import Q
 from rest_framework import viewsets, status
 from rest_framework.decorators import action, api_view
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import AllowAny, IsAdminUser
 from rest_framework.response import Response
 
 from .permissions import IsCommentAuthor
