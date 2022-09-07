@@ -10,7 +10,8 @@ from rest_framework.response import Response
 from rest_framework import status, permissions
 from .serializers import *
 from rest_framework_simplejwt.views import TokenObtainPairView
-from .helpers import send_confirmation_email
+# from .helpers import send_confirmation_email
+from .tasks import send_conf_emails
 from rest_framework.generics import ListAPIView, GenericAPIView, UpdateAPIView
 
 User = get_user_model()
@@ -20,7 +21,7 @@ class RegisterView(APIView):
         serializer = RegisterSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             user = serializer.save()
-            send_confirmation_email(user, user.activation_code)
+            send_conf_emails(user, user.activation_code)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 class LoginView(TokenObtainPairView):

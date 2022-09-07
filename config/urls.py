@@ -27,7 +27,7 @@ schema_view = get_schema_view(
     openapi.Info(
         title='Fullstack',
         default_version='v1',
-        description='chto-to',
+        description='Platform for reading novella',
     ),
     public = True
 )
