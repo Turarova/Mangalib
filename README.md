@@ -37,5 +37,6 @@
 * python-decouple==3.6
 * redis==4.3.4
 * whitenoise==6.1.0
-
+## Ссылка на задеплоиный проект:
+https://ranobelib.herokuapp.com/swagger/
 
