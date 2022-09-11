@@ -1,17 +1,16 @@
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.dispatch import receiver
-from django_rest_passwordreset.signals import reset_password_token_created
+# from django_rest_passwordreset.signals import reset_password_token_created
 from django.core.mail import send_mail
-from rest_framework.decorators import action
+# from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, permissions
 from .serializers import *
 from rest_framework_simplejwt.views import TokenObtainPairView
-# from .helpers import send_confirmation_email
-from .tasks import send_conf_emails
+from .helpers import send_confirmation_email
 from rest_framework.generics import ListAPIView, GenericAPIView, UpdateAPIView
 
 User = get_user_model()
@@ -21,7 +20,7 @@ class RegisterView(APIView):
         serializer = RegisterSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             user = serializer.save()
-            send_conf_emails(user, user.activation_code)
+            send_confirmation_email(user, user.activation_code)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 class LoginView(TokenObtainPairView):
@@ -58,21 +57,21 @@ class UserListAPIView(ListAPIView):
     permission_classes = (permissions.IsAdminUser, )
 
 
-@receiver(reset_password_token_created)
-def password_reset_token_created(sender, instance, reset_password_token, *args, **kwargs):
+# @receiver(reset_password_token_created)
+# def password_reset_token_created(sender, instance, reset_password_token, *args, **kwargs):
 
-    email_plaintext_message = "{}?token={}".format(reverse('password_reset:reset-password-request'), reset_password_token.key)
+#     email_plaintext_message = "{}?token={}".format(reverse('password_reset:reset-password-request'), reset_password_token.key)
 
-    send_mail(
-        # title:
-        "Password Reset for {title}".format(title="Some website title"),
-        # message:
-        email_plaintext_message,
-        # from:
-        "noreply@somehost.local",
-        # to:
-        [reset_password_token.user.email]
-    )
+#     send_mail(
+#         # title:
+#         "Password Reset for {title}".format(title="Some website title"),
+#         # message:
+#         email_plaintext_message,
+#         # from:
+#         "noreply@somehost.local",
+#         # to:
+#         [reset_password_token.user.email]
+#     )
 
 
 
@@ -110,15 +109,14 @@ class ChangePasswordView(UpdateAPIView):
 
 
 class PasswordResetView(APIView):
-    serializer_class = PasswordResetEmailSerializer
     def post(self, request):
-        data = request.data
-        # email = request.email
-        serializer = self.serializer_class(data=data)
-        if serializer.is_valid():
+        serializer_class = PasswordResetEmailSerializer(data = request.data)
+        # serializer = self.serializer_class(data=data)
+        if serializer_class.is_valid(raise_exception=True):
+            print("I'M OKEY")
             pass
         return Response('OK', 200)
 
-    @action(['GET'],detail='fe')
-    def hello(self):
-        return Response("World")
+    # @action(['GET'],detail='fe')
+    # def hello(self):
+    #     return Response("World")

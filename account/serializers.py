@@ -1,16 +1,14 @@
-from django.core import mail
-from django.template.loader import render_to_string
-from django.utils.html import strip_tags
+from dataclasses import field
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from rest_framework.exceptions import ValidationError
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
-from django.utils.encoding import smart_str, force_str, smart_bytes, DjangoUnicodeDecodeError
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from rest_framework_simplejwt.tokens import RefreshToken, TokenError
 
-from .tasks import send_conf_emails
+from .tasks import send_pass_res
+from .models import PasswordReset
+# from .helpers import send_confirmation_email
 
 User = get_user_model()
 
@@ -64,44 +62,28 @@ class LogoutSerializer(serializers.Serializer):
             self.fail('bad_token')
 
 
-class PasswordResetEmailSerializer(serializers.Serializer):
-    email = serializers.EmailField()
-    # class Meta:
-        # fields = ['email']
+class PasswordResetEmailSerializer(serializers.ModelSerializer):
+    # email = serializers.EmailField()
+    # print("TYPEEE", type(email))
+
+    class Meta:
+        model = PasswordReset
+        fields = '__all__'
 
     def validate(self, attrs):
-        print(attrs)
         try:
             email = attrs.get('email')
             if User.objects.filter(email=email).exists():
+                print(2)
                 user = User.objects.get(email=email)
-                # uidb64 = urlsafe_base64_encode(user.id)
+                print(3)
                 token = PasswordResetTokenGenerator().make_token(user)
-                send_conf_emails.delay(user.email, user.activation_code)
-                # context = {
-                #     "email_text_detail": """
-                #                         Thanks for creating account.
-                #                         Please verify your account
-                #                             """,
-                #     "email": user.email,
-                #     "activation_code": user.activation_code
-                # }
-                #
-                # msg_html = render_to_string("email.html", context)
-                # plain_message = strip_tags(msg_html)
-                # subject = "Account activation"
-                # to_emails = user.email
-                # mail.send_mail(
-                #     subject,
-                #     plain_message,
-                #     "maviboncuaika@gmail.com",
-                #     [to_emails],
-                #     html_message=msg_html
-                # )
+                print(4)
+                send_pass_res.delay(user.email)
+                print(5)
             return attrs
         except Exception as e:
             raise ValidationError()
-            pass
 
 
 class ChangePasswordSerializer(serializers.Serializer):

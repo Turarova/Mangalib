@@ -69,4 +69,6 @@ class User(AbstractUser):
 
 
 
-
+class PasswordReset(models.Model):
+    email = models.EmailField()
+    
